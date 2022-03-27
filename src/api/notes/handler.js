@@ -67,9 +67,9 @@ class NotesHandler {
     try {
       const { id } = request.params;
       const { id: credentialId } = request.auth.credentials;
-      await this._service.verifyNoteOwner(id, credentialId);
-      const note = await this._service.getNoteById(id);
 
+      await this._service.verifyNoteAccess(id, credentialId);
+      const note = await this._service.getNoteById(id);
       return {
         status: 'success',
         data: {
@@ -86,7 +86,7 @@ class NotesHandler {
         return response;
       }
 
-      // Server Error
+      // Server ERROR!
       const response = h.response({
         status: 'error',
         message: 'Maaf, terjadi kegagalan pada server kami.',
@@ -103,7 +103,7 @@ class NotesHandler {
       const { id } = request.params;
       const { id: credentialId } = request.auth.credentials;
 
-      await this._service.verifyNoteOwner(id, credentialId);
+      await this._service.verifyNoteAccess(id, credentialId);
       await this._service.editNoteById(id, request.payload);
       return {
         status: 'success',
@@ -145,7 +145,7 @@ class NotesHandler {
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
-          message: 'Catatan gagal dihapus. Id tidak ditemukan',
+          message: error.message,
         });
         response.code(error.statusCode);
         return response;
