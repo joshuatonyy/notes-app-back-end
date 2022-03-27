@@ -31,7 +31,7 @@ class AuthenticationsService {
       values: [token],
     };
 
-    await this.pool.query(query);
+    await this._pool.query(query);
   }
 }
 

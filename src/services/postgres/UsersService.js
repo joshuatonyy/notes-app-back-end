@@ -55,7 +55,7 @@ class UsersService {
     return result.rows[0];
   }
 
-  async verifyUserCrededntial(username, password) {
+  async verifyUserCredential(username, password) {
     const query = {
       text: 'SELECT id, password FROM users WHERE username = $1',
       values: [username],
@@ -68,12 +68,12 @@ class UsersService {
     }
 
     const { id, password: hashedPassword } = result.rows[0];
+
     const match = await bcrypt.compare(password, hashedPassword);
 
     if (!match) {
       throw new AuthenticationError('Kredensial yang Anda berikan salah');
     }
-
     return id;
   }
 }
